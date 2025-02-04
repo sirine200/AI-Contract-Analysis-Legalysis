@@ -20,9 +20,13 @@ import { handleWebhook } from "./controllers/payment.controller";
 const app = express();
 
 mongoose
-  .connect(process.env.MONGODB_URI!)
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error(err));
+  .connect(process.env.MONGODB_URI!, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  } as any)  // Add this as any to avoid TypeScript issues
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
+
 
 app.use(
   cors({

@@ -50,7 +50,7 @@ const features = [
 
 export function HeroSection() {
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32  bg-gradient-to-b  from-[#a1b5d8]/50  via-[#a1b5d8]/50 to-[#b8b8ff]/50">
+    <section className="w-full py-12 md:py-24 lg:py-32  bg-gradient-to-b  from-[#a1b5d8]/50  via-[#a1b5d8]/50 to-[#b8b8ff]/50  rounded-lg shadow-md">
       <div className="container px-4 md:px-6 flex flex-col items-center max-w-6xl mx-auto">
         <Link
           href={"/dashboard"}
@@ -65,7 +65,7 @@ export function HeroSection() {
           Introducing Simple Metrics for your team
         </Link>
         <div className="text-center mb-12 w-full">
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent  bg-gradient-to-r from-indigo-500 to-[#031926] mb-4">
+          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent  bg-gradient-to-r from-indigo-500 to-[#031926] mb-4 ">
           AI-Driven Contract Insights for Smarter Decisions
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
