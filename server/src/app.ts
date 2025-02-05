@@ -1,3 +1,4 @@
+
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -18,6 +19,8 @@ import paymentsRoute from "./routes/payments";
 import { handleWebhook } from "./controllers/payment.controller";
 
 const app = express();
+app.set("trust proxy", 1);
+
 
 mongoose
   .connect(process.env.MONGODB_URI!, {
@@ -32,6 +35,7 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
+    exposedHeaders: ["set-cookie"] 
   })
 );
 
@@ -59,7 +63,8 @@ app.use(
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI! }),
     cookie: {
       secure: true, 
-      sameSite: "none", 
+      sameSite: "none",
+      domain: ".onrender.com", 
       maxAge: 24 * 60 * 60 * 1000,
       httpOnly: true
     },
