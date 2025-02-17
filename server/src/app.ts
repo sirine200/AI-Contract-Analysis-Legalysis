@@ -1,4 +1,3 @@
-
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -21,7 +20,6 @@ import { handleWebhook } from "./controllers/payment.controller";
 const app = express();
 app.set("trust proxy", 1);
 
-
 mongoose
   .connect(process.env.MONGODB_URI!, {
     useNewUrlParser: true,
@@ -29,7 +27,6 @@ mongoose
   } as any)  // Add this as any to avoid TypeScript issues
   .then(() => console.log("✅ Connected to MongoDB"))
   .catch((err) => console.error("❌ MongoDB Connection Error:", err));
-
 
 app.use(
   cors({
@@ -54,7 +51,6 @@ app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
 
-
 app.use(
   session({
     secret: process.env.SESSION_SECRET!,
@@ -78,7 +74,5 @@ app.use("/auth", authRoute);
 app.use("/contracts", contractsRoute);
 app.use("/payments", paymentsRoute);
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-});
+// Export the app so Vercel can use it as a serverless function
+export default app;
