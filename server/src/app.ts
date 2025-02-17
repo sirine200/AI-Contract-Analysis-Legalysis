@@ -74,5 +74,5 @@ app.use("/auth", authRoute);
 app.use("/contracts", contractsRoute);
 app.use("/payments", paymentsRoute);
 
-
+// Export the app so Vercel can use it as a serverless function
 export default app;
