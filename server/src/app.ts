@@ -1,3 +1,4 @@
+
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -20,19 +21,17 @@ import { handleWebhook } from "./controllers/payment.controller";
 const app = express();
 app.set("trust proxy", 1);
 
+
 mongoose
-  .connect(process.env.MONGODB_URI!, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  } as any)  // Add this as any to avoid TypeScript issues
-  .then(() => console.log("✅ Connected to MongoDB"))
-  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
+  .connect(process.env.MONGODB_URI!)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error(err));
+
 
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
-    exposedHeaders: ["set-cookie"] 
   })
 );
 
@@ -47,10 +46,6 @@ app.post(
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Hello, World!");
-});
-
 app.use(
   session({
     secret: process.env.SESSION_SECRET!,
@@ -58,14 +53,16 @@ app.use(
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI! }),
     cookie: {
-      secure: true, 
-      sameSite: "none",
-      domain: ".onrender.com", 
-      maxAge: 24 * 60 * 60 * 1000,
-      httpOnly: true
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
     },
   })
 );
+
+app.get("/", (req, res) => {
+  res.send("Hello, World!");
+});
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -74,5 +71,8 @@ app.use("/auth", authRoute);
 app.use("/contracts", contractsRoute);
 app.use("/payments", paymentsRoute);
 
-// Export the app so Vercel can use it as a serverless function
-export default app;
+const PORT = Number(process.env.PORT) || 8080; 
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server started on port ${PORT}`);
+});
+
