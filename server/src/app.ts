@@ -53,11 +53,9 @@ app.use(
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI! }),
     cookie: {
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      domain: process.env.NODE_ENV === "production" 
-        ? ".onrender.com" 
-        : undefined,
+      secure: true,
+      sameSite: "none",
+      domain: ".onrender.com",
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     },
