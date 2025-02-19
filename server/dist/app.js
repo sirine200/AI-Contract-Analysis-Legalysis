@@ -22,43 +22,41 @@ const payment_controller_1 = require("./controllers/payment.controller");
 const app = (0, express_1.default)();
 app.set("trust proxy", 1);
 mongoose_1.default
-    .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}) // Add this as any to avoid TypeScript issues
-    .then(() => console.log("✅ Connected to MongoDB"))
-    .catch((err) => console.error("❌ MongoDB Connection Error:", err));
+    .connect(process.env.MONGODB_URI)
+    .then(() => console.log("Connected to MongoDB"))
+    .catch((err) => console.error(err));
 app.use((0, cors_1.default)({
     origin: process.env.CLIENT_URL,
     credentials: true,
-    exposedHeaders: ["set-cookie"]
 }));
 app.use((0, helmet_1.default)());
 app.use((0, morgan_1.default)("dev"));
 app.post("/payments/webhook", express_1.default.raw({ type: "application/json" }), payment_controller_1.handleWebhook);
 app.use(express_1.default.json());
-app.get("/", (req, res) => {
-    res.send("Hello, World!");
-});
 app.use((0, express_session_1.default)({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: connect_mongo_1.default.create({ mongoUrl: process.env.MONGODB_URI }),
     cookie: {
-        secure: true,
-        sameSite: "none",
-        domain: ".onrender.com",
-        maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: true
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        domain: process.env.NODE_ENV === "production"
+            ? ".onrender.com"
+            : undefined,
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
     },
 }));
+app.get("/", (req, res) => {
+    res.send("Hello, World!");
+});
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
 app.use("/auth", auth_1.default);
 app.use("/contracts", contracts_1.default);
 app.use("/payments", payments_1.default);
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
+const PORT = Number(process.env.PORT) || 8080;
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server started on port ${PORT}`);
 });
