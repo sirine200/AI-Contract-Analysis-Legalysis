@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { UserButton } from "./shared/user-button";
 
+
 const navItems: { name: string; href: string }[] = [
   { name: "Home", href: "/" },
   { name: "Dashboard", href: "/dashboard" },

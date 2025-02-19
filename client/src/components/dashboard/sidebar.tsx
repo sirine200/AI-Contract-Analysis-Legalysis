@@ -15,7 +15,7 @@ export const Sidebar = () => {
 };
 
 const SidebarContent = () => {
-  const pathname = usePathname();
+  const pathname = usePathname()|| '';
 
   const sidebarItems = [
     {
