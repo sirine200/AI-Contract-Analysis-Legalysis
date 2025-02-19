@@ -43,8 +43,15 @@ router.get("/logout", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.status(200).json({ status: "ok" });
+    req.session.destroy((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.clearCookie("connect.sid"); // Clear the session cookie
+      res.status(200).json({ status: "ok" });
+    });
   });
 });
+
 
 export default router;
