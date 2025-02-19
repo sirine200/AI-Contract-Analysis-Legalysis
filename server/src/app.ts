@@ -11,6 +11,7 @@ import passport from "passport";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import "./config/passport";
+import cookieParser from "cookie-parser";
 
 // routes
 import authRoute from "./routes/auth";
@@ -46,6 +47,7 @@ app.post(
 
 app.use(express.json());
 
+app.use(cookieParser()); 
 app.use(
   session({
     secret: process.env.SESSION_SECRET!,
@@ -55,7 +57,6 @@ app.use(
     cookie: {
       secure: true,
       sameSite: "none",
-      domain: ".onrender.com",
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     },

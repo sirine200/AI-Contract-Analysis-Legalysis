@@ -1,5 +1,6 @@
 import express from "express";
 import passport from "passport";
+import { Request, Response, NextFunction } from 'express';
 
 const router = express.Router();
 
@@ -8,13 +9,26 @@ router.get(
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-router.get(
-  "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  (req, res) => {
-    res.redirect(`${process.env.CLIENT_URL}/dashboard`);
-  }
-);
+
+
+router.get("/google/callback", (req: Request, res: Response, next: NextFunction) => {
+  passport.authenticate("google", { failureRedirect: "/login" }, (err, user, info) => {
+    if (err || !user) {
+      return res.status(500).json({ message: "Authentication failed." });
+    }
+
+    req.logIn(user, (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Login failed." });
+      }
+
+      
+      return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+    });
+  })(req, res, next); 
+});
+
+
 
 router.get("/current-user", (req, res) => {
   if (req.isAuthenticated()) {
