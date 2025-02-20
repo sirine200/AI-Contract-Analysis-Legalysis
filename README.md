@@ -5,11 +5,13 @@
 ---
 ## Snapshot
 
-Here are some screenshots showcasing key areas of the platform:
 
 - ![Home Page](Home-page.png)
+  
 - ![Dashboard](Dashboard.png)
+  
 - ![Report Page](Report-page.png)
+  
 - ![Risks](Risks.png)
 
 ---
