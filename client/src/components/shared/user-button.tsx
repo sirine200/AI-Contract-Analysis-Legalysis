@@ -26,7 +26,7 @@ export function UserButton() {
   };
 
   return (
-    <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+    <div className="fixed top-0 right-0 flex items-center py-4 px-6">
       {user ? (
         <>
           <DropdownMenu>
